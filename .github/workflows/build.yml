@@ -1,0 +1,23 @@
+name: Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Compile
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: cv.tex
+          working_directory: src/
+          latexmk_use_xelatex: true
+      - run: |
+          mkdir build
+          mv src/cv.pdf build
+          touch build/.nojekyll
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build
